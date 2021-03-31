@@ -113,6 +113,7 @@ public class EmployeeController {
 	@ResponseBody
 	public ResponseEntity<?> search(@RequestBody @Valid RequestInfoWrapper requestInfoWrapper, @ModelAttribute EmployeeSearchCriteria criteria) {
 		validator.validateSearchRequest(requestInfoWrapper.getRequestInfo(), criteria);
+		log.info("inside _search endpoint in controller class - checking logs working or not");//remove later
 		EmployeeResponse employeeResponse = employeeService.search(criteria, requestInfoWrapper.getRequestInfo());
 		return new ResponseEntity<>(employeeResponse,HttpStatus.OK);
 	}
