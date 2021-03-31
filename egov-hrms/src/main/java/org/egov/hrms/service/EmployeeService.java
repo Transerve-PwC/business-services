@@ -135,6 +135,7 @@ public class EmployeeService {
 	 * @return
 	 */
 	public EmployeeResponse search(EmployeeSearchCriteria criteria, RequestInfo requestInfo) {
+		log.info("inside search method in EmployeeService class");//remove later
 		boolean  userChecked = false;
 		if(null == criteria.getIsActive() || criteria.getIsActive())
 			criteria.setIsActive(true);
@@ -142,6 +143,7 @@ public class EmployeeService {
 			criteria.setIsActive(false);
         Map<String, User> mapOfUsers = new HashMap<String, User>();
 		if(!StringUtils.isEmpty(criteria.getPhone()) || !CollectionUtils.isEmpty(criteria.getRoles())) {
+			log.info("inside first if condition");//remove later
             Map<String, Object> userSearchCriteria = new HashMap<>();
             userSearchCriteria.put(HRMSConstants.HRMS_USER_SEARCH_CRITERA_TENANTID,criteria.getTenantId());
             if(!StringUtils.isEmpty(criteria.getPhone()))
@@ -163,7 +165,9 @@ public class EmployeeService {
 		//checks if above criteria met and result is not  null will check for name search if list of names are given as user search on name is not bulk api
 
 		if(!((!CollectionUtils.isEmpty(criteria.getRoles()) || !StringUtils.isEmpty(criteria.getPhone())) && CollectionUtils.isEmpty(criteria.getUuids()))){
+			log.info("inside second if condition");
 			if(!CollectionUtils.isEmpty(criteria.getNames())) {
+				log.info("inside second if's first nested if condition");
 				List<String> userUUIDs = new ArrayList<>();
 				for(String name: criteria.getNames()) {
 					Map<String, Object> userSearchCriteria = new HashMap<>();
@@ -187,8 +191,10 @@ public class EmployeeService {
 		if(userChecked)
 			criteria.setTenantId(null);
         List <Employee> employees = new ArrayList<>();
-        if(!((!CollectionUtils.isEmpty(criteria.getRoles()) || !CollectionUtils.isEmpty(criteria.getNames()) || !StringUtils.isEmpty(criteria.getPhone())) && CollectionUtils.isEmpty(criteria.getUuids())))
-            employees = repository.fetchEmployees(criteria, requestInfo);
+        if(!((!CollectionUtils.isEmpty(criteria.getRoles()) || !CollectionUtils.isEmpty(criteria.getNames()) || !StringUtils.isEmpty(criteria.getPhone())) && CollectionUtils.isEmpty(criteria.getUuids()))) {
+        	log.info("inside if condition fetching from repoitory repository.fetchEmployees(criteria, requestInfo)");
+        	employees = repository.fetchEmployees(criteria, requestInfo);
+        }
         List<String> uuids = employees.stream().map(Employee :: getUuid).collect(Collectors.toList());
 		if(!CollectionUtils.isEmpty(uuids)){
             Map<String, Object> UserSearchCriteria = new HashMap<>();
