@@ -40,12 +40,15 @@ public class EmployeeRepository {
 	 * @return
 	 */
 	public List<Employee> fetchEmployees(EmployeeSearchCriteria criteria, RequestInfo requestInfo){
+		log.info("inside method fetchEmployees in class EmployeeRepository");
 		List<Employee> employees = new ArrayList<>();
 		List<Object> preparedStmtList = new ArrayList<>();
 		if(hrmsUtils.isAssignmentSearchReqd(criteria)) {
 			List<String> empUuids = fetchEmployeesforAssignment(criteria, requestInfo);
-			if (CollectionUtils.isEmpty(empUuids))
+			if (CollectionUtils.isEmpty(empUuids)) {
+				log.info("returning empty list as uuids is empty");
 				return employees;
+			}
 			else {
 				if(!CollectionUtils.isEmpty(criteria.getUuids()))
 					criteria.setUuids(criteria.getUuids().stream().filter(empUuids::contains).collect(Collectors.toList()));
@@ -53,9 +56,12 @@ public class EmployeeRepository {
 					criteria.setUuids(empUuids);
 			}
 		}
+		log.info("criteria constructed inside method fetchEmployees: "+criteria);
 		String query = queryBuilder.getEmployeeSearchQuery(criteria, preparedStmtList);
+		log.info("query constructed inside method fetchEmployees: "+query);
 		try {
 			employees = jdbcTemplate.query(query, preparedStmtList.toArray(),rowMapper);
+			log.info("output of query run: "+employees);
 		}catch(Exception e) {
 			log.error("Exception while making the db call: ",e);
 			log.error("query; "+query);
