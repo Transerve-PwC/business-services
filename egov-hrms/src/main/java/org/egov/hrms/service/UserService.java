@@ -141,6 +141,7 @@ public class UserService {
 			dobFormat = "dd/MM/yyyy";
 		try{
 			LinkedHashMap responseMap = (LinkedHashMap) restCallRepository.fetchResult(uri, userRequest);
+			log.info("inside method userCall calling POST to uri: " + uri + "with requestBody" + userRequest);
 			parseResponse(responseMap,dobFormat);
 			UserResponse userDetailResponse = objectMapper.convertValue(responseMap,UserResponse.class);
 			return userDetailResponse;
