@@ -192,8 +192,9 @@ public class EmployeeService {
 			criteria.setTenantId(null);
         List <Employee> employees = new ArrayList<>();
         if(!((!CollectionUtils.isEmpty(criteria.getRoles()) || !CollectionUtils.isEmpty(criteria.getNames()) || !StringUtils.isEmpty(criteria.getPhone())) && CollectionUtils.isEmpty(criteria.getUuids()))) {
-        	log.info("inside if condition fetching from repoitory repository.fetchEmployees(criteria, requestInfo)");
+        	log.info("inside if condition fetching from repository repository.fetchEmployees(criteria, requestInfo)");
         	employees = repository.fetchEmployees(criteria, requestInfo);
+        	log.info("employees fetched from repository: "+employees);
         }
         List<String> uuids = employees.stream().map(Employee :: getUuid).collect(Collectors.toList());
 		if(!CollectionUtils.isEmpty(uuids)){
