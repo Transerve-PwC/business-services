@@ -70,9 +70,11 @@ public class EmployeeRepository {
 	}
 
 	private List<String> fetchEmployeesforAssignment(EmployeeSearchCriteria criteria, RequestInfo requestInfo) {
+		log.info("inside method fetchEmployeesforAssignment");
 		List<String> employeesIds = new ArrayList<>();
 		List <Object> preparedStmtList = new ArrayList<>();
 		String query = queryBuilder.getAssignmentSearchQuery(criteria, preparedStmtList);
+		log.info("query constructed inside method fetchEmployeesforAssignment: "+query);
 		try {
 
 			employeesIds = jdbcTemplate.queryForList(query, preparedStmtList.toArray(),String.class);
