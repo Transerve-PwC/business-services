@@ -56,6 +56,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
@@ -171,7 +172,6 @@ public class BillServicev2 {
 		List<String> cosnumerCodesToBeExpired = new ArrayList<>();
 		List<BillV2> billsToBeReturned = new ArrayList<>();
 		Boolean isBillExpired = false;
-		
 		for (Entry<String, BillV2> entry : consumerCodeAndBillMap.entrySet()) {
 			BillV2 bill = entry.getValue();
 
@@ -183,6 +183,11 @@ public class BillServicev2 {
 				billsToBeReturned.add(bill);
 			}
 			cosnumerCodesNotFoundInBill.remove(entry.getKey());
+			//to support both oldpropertyid and actual propertyid in consumercodes while fetching bill, the other one has to be removed after processing one
+			//As of now no specific difference between oldpropertyid and new id so removing the other one for saharanpur specifically--
+			if (cosnumerCodesNotFoundInBill.size() == 1 && Objects.nonNull(bill.getTenantId())
+					&& bill.getTenantId().equalsIgnoreCase("up.saharanpur"))
+				cosnumerCodesNotFoundInBill.clear();
 			isBillExpired = false;
 		}
 			
